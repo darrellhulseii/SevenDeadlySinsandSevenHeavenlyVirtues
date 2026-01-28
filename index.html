@@ -20,6 +20,326 @@
             overflow: hidden;
         }
         
+        /* Custom Sprite System */
+        .sprite {
+            position: relative;
+            width: 100px;
+            height: 120px;
+        }
+        
+        .sprite-guardian {
+            width: 100px;
+            height: 120px;
+            position: relative;
+        }
+        
+        .sprite-guardian::before {
+            content: '☃️';
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .sprite-angel {
+            width: 100px;
+            height: 120px;
+            position: relative;
+        }
+        
+        .sprite-angel::before {
+            content: '😇';
+            font-size: 80px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Create halo effect for angel */
+        .sprite-angel::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 15px;
+            border: 3px solid #FFD700;
+            border-radius: 50%;
+            box-shadow: 0 0 20px #FFD700, inset 0 0 10px #FFD700;
+            animation: haloGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes haloGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px #FFD700, inset 0 0 10px #FFD700;
+                opacity: 0.8;
+            }
+            50% {
+                box-shadow: 0 0 30px #FFD700, inset 0 0 20px #FFD700;
+                opacity: 1;
+            }
+        }
+        
+        /* Enemy sprites with professional styling */
+        .sprite-enemy {
+            width: 100px;
+            height: 100px;
+            position: relative;
+            font-size: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Prayer Text Display */
+        #prayerTextDisplay {
+            position: fixed;
+            bottom: 240px;
+            right: 20px;
+            width: 350px;
+            max-height: 400px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(26, 26, 46, 0.95));
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            display: none;
+            z-index: 600;
+            overflow-y: auto;
+        }
+        
+        #prayerTextDisplay.active {
+            display: block;
+            animation: slideInRight 0.5s ease-out;
+        }
+        
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .prayer-text-title {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: #FFD700;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 2px 2px 0 #000;
+            border-bottom: 2px solid #FFD700;
+            padding-bottom: 10px;
+        }
+        
+        .prayer-text-content {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #f0f0f0;
+            text-align: justify;
+            font-style: italic;
+        }
+        
+        .close-prayer-text {
+            margin-top: 15px;
+            padding: 8px 20px;
+            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+            border: 2px solid #FFD700;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: all 0.2s;
+        }
+        
+        .close-prayer-text:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(39, 174, 96, 0.5);
+        }
+        
+        /* Prayer Selection Modal */
+        #prayerSelection {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1600;
+        }
+        
+        #prayerSelection.active {
+            display: flex;
+        }
+        
+        .prayer-modal {
+            background: linear-gradient(135deg, rgba(15, 12, 41, 0.98), rgba(48, 43, 99, 0.98));
+            border: 5px solid #FFD700;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+        }
+        
+        .prayer-modal-title {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 0 #000;
+        }
+        
+        .prayer-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .prayer-option {
+            padding: 20px;
+            background: linear-gradient(180deg, #9b59b6 0%, #6c3483 100%);
+            border: 3px solid #FFD700;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            box-shadow: 0 4px 0 #4a235a;
+        }
+        
+        .prayer-option:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 7px 0 #4a235a, 0 7px 20px rgba(155, 89, 182, 0.5);
+        }
+        
+        .prayer-option:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 0 #4a235a;
+        }
+        
+        .prayer-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+        }
+        
+        .prayer-name {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            font-weight: 600;
+        }
+        
+        .prayer-damage {
+            font-size: 12px;
+            color: #FFD700;
+            margin-top: 5px;
+        }
+        
+        /* Different Prayer Effects */
+        .prayer-effect-cross {
+            position: absolute;
+            font-size: 60px;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700;
+            animation: crossEffect 2s ease-out forwards;
+            z-index: 50;
+            pointer-events: none;
+        }
+        
+        @keyframes crossEffect {
+            0% {
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+            }
+            100% {
+                transform: scale(3) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        
+        .prayer-effect-rose {
+            position: absolute;
+            font-size: 30px;
+            animation: roseSpiral 2s ease-out forwards;
+            z-index: 50;
+            pointer-events: none;
+        }
+        
+        @keyframes roseSpiral {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) rotate(720deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+        
+        .prayer-effect-glory {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #fff, #FFD700);
+            border-radius: 50%;
+            animation: gloryBurst 1.5s ease-out forwards;
+            z-index: 50;
+            pointer-events: none;
+            box-shadow: 0 0 20px #FFD700;
+        }
+        
+        @keyframes gloryBurst {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        .prayer-effect-jesus {
+            position: absolute;
+            font-size: 50px;
+            animation: jesusAscend 2.5s ease-out forwards;
+            z-index: 50;
+            pointer-events: none;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.8);
+        }
+        
+        @keyframes jesusAscend {
+            0% {
+                transform: translateY(100px) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-200px) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
         #introScreen {
             position: fixed;
             top: 0;
@@ -825,7 +1145,9 @@
         <div id="battleField">
             <div class="party-side">
                 <div class="character" id="hero">
-                    <div class="hero-sprite">☃️</div>
+                    <div class="hero-sprite">
+                        <div class="sprite sprite-guardian"></div>
+                    </div>
                     <div class="character-name">GUARDIAN ANGEL</div>
                     <div class="hp-bar-container">
                         <div class="hp-bar" style="width: 100%"></div>
@@ -834,7 +1156,9 @@
                 </div>
                 
                 <div class="character" id="companion">
-                    <div class="hero-sprite">🦧</div>
+                    <div class="hero-sprite">
+                        <div class="sprite sprite-angel"></div>
+                    </div>
                     <div class="character-name">ST MICHAEL</div>
                     <div class="hp-bar-container">
                         <div class="hp-bar" style="width: 100%"></div>
@@ -846,7 +1170,9 @@
             <div class="enemy-side" id="enemyContainer">
                 <div class="sin-name" id="sinName">PRIDE</div>
                 <div class="character enemy" id="currentEnemy">
-                    <div class="enemy-sprite" id="enemySprite">😈</div>
+                    <div class="enemy-sprite">
+                        <div class="sprite sprite-enemy" id="enemySprite">😈</div>
+                    </div>
                     <div class="hp-bar-container">
                         <div class="hp-bar" style="width: 100%"></div>
                         <div class="hp-text">100/100</div>
@@ -879,6 +1205,21 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- Prayer Selection Modal -->
+    <div id="prayerSelection">
+        <div class="prayer-modal">
+            <div class="prayer-modal-title">✝️ SELECT YOUR PRAYER ✝️</div>
+            <div class="prayer-options" id="prayerOptions"></div>
+        </div>
+    </div>
+    
+    <!-- Prayer Text Display -->
+    <div id="prayerTextDisplay">
+        <div class="prayer-text-title" id="prayerTextTitle"></div>
+        <div class="prayer-text-content" id="prayerTextContent"></div>
+        <button class="close-prayer-text" onclick="closePrayerText()">AMEN</button>
     </div>
 
     <!-- Passage Overlay -->
@@ -1333,10 +1674,34 @@
                 }
             ],
             prayers: [
-                { name: 'OUR FATHER', icon: '✝️', damage: 40 },
-                { name: 'HAIL MARY', icon: '🌹', damage: 35 },
-                { name: 'GLORY BE', icon: '✨', damage: 30 },
-                { name: 'JESUS PRAYER', icon: '🙏', damage: 45 }
+                { 
+                    name: 'OUR FATHER', 
+                    icon: '✝️', 
+                    damage: 40,
+                    text: `Our Father, who art in heaven, hallowed be thy name; thy kingdom come; thy will be done on earth as it is in heaven. Give us this day our daily bread; and forgive us our trespasses as we forgive those who trespass against us; and lead us not into temptation, but deliver us from evil. Amen.`,
+                    used: false
+                },
+                { 
+                    name: 'HAIL MARY', 
+                    icon: '🌹', 
+                    damage: 35,
+                    text: `Hail Mary, full of grace, the Lord is with thee; blessed art thou among women, and blessed is the fruit of thy womb, Jesus. Holy Mary, Mother of God, pray for us sinners, now and at the hour of our death. Amen.`,
+                    used: false
+                },
+                { 
+                    name: 'GLORY BE', 
+                    icon: '✨', 
+                    damage: 30,
+                    text: `Glory be to the Father, and to the Son, and to the Holy Spirit. As it was in the beginning, is now, and ever shall be, world without end. Amen.`,
+                    used: false
+                },
+                { 
+                    name: 'JESUS PRAYER', 
+                    icon: '🙏', 
+                    damage: 45,
+                    text: `Lord Jesus Christ, Son of God, have mercy on me, a sinner.`,
+                    used: false
+                }
             ],
             waitingForAction: true
         };
@@ -1375,10 +1740,49 @@
         }
 
         function showPrayerMenu() {
-            const prayers = game.prayers;
-            const randomPrayer = prayers[Math.floor(Math.random() * prayers.length)];
+            game.waitingForAction = true;
             
-            executePrayer(game.heroes[game.currentHeroIndex], randomPrayer);
+            const modal = document.getElementById('prayerSelection');
+            const optionsContainer = document.getElementById('prayerOptions');
+            optionsContainer.innerHTML = '';
+            
+            game.prayers.forEach((prayer, index) => {
+                const option = document.createElement('div');
+                option.className = 'prayer-option';
+                option.innerHTML = `
+                    <div class="prayer-icon">${prayer.icon}</div>
+                    <div class="prayer-name">${prayer.name}</div>
+                    <div class="prayer-damage">Holy Damage: ${prayer.damage}</div>
+                `;
+                option.onclick = () => selectPrayer(index);
+                optionsContainer.appendChild(option);
+            });
+            
+            modal.classList.add('active');
+        }
+        
+        function selectPrayer(prayerIndex) {
+            const prayer = game.prayers[prayerIndex];
+            document.getElementById('prayerSelection').classList.remove('active');
+            game.waitingForAction = false;
+            
+            // Show prayer text if first time using
+            if (!prayer.used) {
+                showPrayerText(prayer);
+                prayer.used = true;
+            }
+            
+            executePrayer(game.heroes[game.currentHeroIndex], prayer);
+        }
+        
+        function showPrayerText(prayer) {
+            document.getElementById('prayerTextTitle').textContent = prayer.name;
+            document.getElementById('prayerTextContent').textContent = prayer.text;
+            document.getElementById('prayerTextDisplay').classList.add('active');
+        }
+        
+        function closePrayerText() {
+            document.getElementById('prayerTextDisplay').classList.remove('active');
         }
 
         function executeAttack(hero) {
@@ -1414,13 +1818,79 @@
             // Create divine light from heaven
             createDivineLight(enemyEl);
             
+            // Create different effects based on prayer type
+            const rect = enemyEl.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            if (prayer.name === 'OUR FATHER') {
+                // Cross effect
+                for (let i = 0; i < 3; i++) {
+                    setTimeout(() => {
+                        const cross = document.createElement('div');
+                        cross.className = 'prayer-effect-cross';
+                        cross.textContent = '✝️';
+                        cross.style.left = centerX + 'px';
+                        cross.style.top = centerY + 'px';
+                        document.body.appendChild(cross);
+                        setTimeout(() => cross.remove(), 2000);
+                    }, i * 200);
+                }
+            } else if (prayer.name === 'HAIL MARY') {
+                // Rose spiral effect
+                for (let i = 0; i < 12; i++) {
+                    setTimeout(() => {
+                        const rose = document.createElement('div');
+                        rose.className = 'prayer-effect-rose';
+                        rose.textContent = '🌹';
+                        const angle = (i / 12) * Math.PI * 2;
+                        const distance = 150;
+                        rose.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                        rose.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                        rose.style.left = centerX + 'px';
+                        rose.style.top = centerY + 'px';
+                        document.body.appendChild(rose);
+                        setTimeout(() => rose.remove(), 2000);
+                    }, i * 50);
+                }
+            } else if (prayer.name === 'GLORY BE') {
+                // Glory burst - star particles
+                for (let i = 0; i < 40; i++) {
+                    setTimeout(() => {
+                        const glory = document.createElement('div');
+                        glory.className = 'prayer-effect-glory';
+                        const angle = Math.random() * Math.PI * 2;
+                        const distance = 100 + Math.random() * 150;
+                        glory.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                        glory.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                        glory.style.left = centerX + 'px';
+                        glory.style.top = centerY + 'px';
+                        document.body.appendChild(glory);
+                        setTimeout(() => glory.remove(), 1500);
+                    }, i * 20);
+                }
+            } else if (prayer.name === 'JESUS PRAYER') {
+                // Jesus prayer - ascending text
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const jesus = document.createElement('div');
+                        jesus.className = 'prayer-effect-jesus';
+                        jesus.textContent = '🙏';
+                        jesus.style.left = (centerX - 40 + i * 20) + 'px';
+                        jesus.style.top = (centerY + 50) + 'px';
+                        document.body.appendChild(jesus);
+                        setTimeout(() => jesus.remove(), 2500);
+                    }, i * 150);
+                }
+            }
+            
             // Create prayer animation
-            const rect = heroEl.getBoundingClientRect();
+            const heroRect = heroEl.getBoundingClientRect();
             const prayerAnim = document.createElement('div');
             prayerAnim.className = 'prayer-animation';
             prayerAnim.textContent = prayer.icon;
-            prayerAnim.style.left = rect.left + rect.width / 2 + 'px';
-            prayerAnim.style.top = rect.top + 'px';
+            prayerAnim.style.left = heroRect.left + heroRect.width / 2 + 'px';
+            prayerAnim.style.top = heroRect.top + 'px';
             document.body.appendChild(prayerAnim);
             
             setTimeout(() => prayerAnim.remove(), 1500);
