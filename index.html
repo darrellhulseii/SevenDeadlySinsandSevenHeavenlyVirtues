@@ -527,6 +527,244 @@
             }
         }
         
+        /* Divine Light Effect */
+        .divine-light {
+            position: fixed;
+            top: -100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200%;
+            background: linear-gradient(180deg, 
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0.9) 10%,
+                rgba(255, 215, 0, 0.7) 30%,
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 100%);
+            pointer-events: none;
+            z-index: 200;
+            animation: divineDescend 2s ease-out forwards;
+            filter: blur(20px);
+            box-shadow: 0 0 100px rgba(255, 255, 255, 0.8);
+        }
+        
+        @keyframes divineDescend {
+            0% {
+                top: -100%;
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                top: 100%;
+                opacity: 0;
+            }
+        }
+        
+        /* Particle Effects */
+        .particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, #FFD700 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 3s ease-out forwards;
+            box-shadow: 0 0 10px #FFD700;
+        }
+        
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-300px) scale(0);
+                opacity: 0;
+            }
+        }
+        
+        /* Enhanced Battle Background */
+        #battleField::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 50%, rgba(255, 215, 0, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 50%, rgba(138, 43, 226, 0.05) 0%, transparent 50%);
+            animation: backgroundPulse 4s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes backgroundPulse {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        /* Glowing borders */
+        .hp-bar-container {
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3),
+                        inset 0 0 10px rgba(255, 215, 0, 0.1);
+            animation: borderGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes borderGlow {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(255, 215, 0, 0.3),
+                            inset 0 0 10px rgba(255, 215, 0, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 25px rgba(255, 215, 0, 0.6),
+                            inset 0 0 15px rgba(255, 215, 0, 0.2);
+            }
+        }
+        
+        /* Enhanced hero sprites */
+        .hero-sprite {
+            position: relative;
+        }
+        
+        .hero-sprite::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120%;
+            height: 120%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.2) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: heroAura 3s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes heroAura {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+        }
+        
+        /* Enhanced enemy sprites */
+        .enemy-sprite::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 130%;
+            height: 130%;
+            background: radial-gradient(circle, rgba(255, 0, 0, 0.3) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: enemyAura 2s ease-in-out infinite;
+            z-index: -1;
+        }
+        
+        @keyframes enemyAura {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1) rotate(0deg);
+                opacity: 0.6;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.3) rotate(180deg);
+                opacity: 1;
+            }
+        }
+        
+        /* Victory sparkles */
+        .victory-sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            pointer-events: none;
+            animation: sparkle 1.5s ease-out forwards;
+            box-shadow: 0 0 10px #FFD700;
+        }
+        
+        @keyframes sparkle {
+            0% {
+                transform: translate(0, 0) scale(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        /* Enhanced attack animation */
+        .slash-effect {
+            position: absolute;
+            font-size: 80px;
+            color: #FFD700;
+            text-shadow: 0 0 20px #FFD700;
+            animation: slashAnimation 0.6s ease-out forwards;
+            pointer-events: none;
+            z-index: 150;
+        }
+        
+        @keyframes slashAnimation {
+            0% {
+                transform: translateX(-100px) rotate(-45deg) scale(0.5);
+                opacity: 0;
+            }
+            50% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100px) rotate(45deg) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        /* Audio controls */
+        #audioControls {
+            position: fixed;
+            bottom: 230px;
+            right: 20px;
+            z-index: 500;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border: 2px solid #FFD700;
+            border-radius: 8px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .audio-btn {
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+            border: 2px solid #fff;
+            color: #000;
+            font-size: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .audio-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px #FFD700;
+        }
+        
         @media (max-width: 768px) {
             #battleField {
                 padding: 20px;
@@ -588,19 +826,19 @@
             <div class="party-side">
                 <div class="character" id="hero">
                     <div class="hero-sprite">☃️</div>
-                    <div class="character-name">GUARDIAN</div>
+                    <div class="character-name">GUARDIAN ANGEL</div>
                     <div class="hp-bar-container">
                         <div class="hp-bar" style="width: 100%"></div>
-                        <div class="hp-text">150/150</div>
+                        <div class="hp-text">777/777</div>
                     </div>
                 </div>
                 
                 <div class="character" id="companion">
                     <div class="hero-sprite">🦧</div>
-                    <div class="character-name">COMPANION</div>
+                    <div class="character-name">ST MICHAEL</div>
                     <div class="hp-bar-container">
                         <div class="hp-bar" style="width: 100%"></div>
-                        <div class="hp-text">120/120</div>
+                        <div class="hp-text">900/900</div>
                     </div>
                 </div>
             </div>
@@ -615,6 +853,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div id="audioControls">
+            <button class="audio-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
         </div>
         
         <div id="menuContainer">
@@ -693,20 +935,310 @@
     </div>
 
     <script>
+        // Audio System - Generate Piano-like Ave Maria and Christ Be Our Light
+        let audioContext;
+        let mainMelodyGain;
+        let victoryMelodyGain;
+        let isMuted = false;
+        
+        function initAudio() {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Main game music gain
+            mainMelodyGain = audioContext.createGain();
+            mainMelodyGain.connect(audioContext.destination);
+            mainMelodyGain.gain.value = 0.12;
+            
+            // Victory music gain
+            victoryMelodyGain = audioContext.createGain();
+            victoryMelodyGain.connect(audioContext.destination);
+            victoryMelodyGain.gain.value = 0.15;
+        }
+        
+        function playPianoNote(frequency, startTime, duration, gainNode, velocity = 0.8) {
+            // Create piano-like sound with multiple harmonics
+            const fundamental = audioContext.createOscillator();
+            const harmonic2 = audioContext.createOscillator();
+            const harmonic3 = audioContext.createOscillator();
+            
+            const noteGain = audioContext.createGain();
+            const harm2Gain = audioContext.createGain();
+            const harm3Gain = audioContext.createGain();
+            
+            // Fundamental frequency
+            fundamental.type = 'sine';
+            fundamental.frequency.value = frequency;
+            
+            // Harmonics for piano-like timbre
+            harmonic2.type = 'sine';
+            harmonic2.frequency.value = frequency * 2;
+            
+            harmonic3.type = 'sine';
+            harmonic3.frequency.value = frequency * 3;
+            
+            // Volume envelope for piano attack and decay
+            const maxVol = velocity * 0.3;
+            noteGain.gain.setValueAtTime(0, startTime);
+            noteGain.gain.linearRampToValueAtTime(maxVol, startTime + 0.01);
+            noteGain.gain.exponentialRampToValueAtTime(maxVol * 0.7, startTime + 0.1);
+            noteGain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+            
+            harm2Gain.gain.value = 0.3;
+            harm3Gain.gain.value = 0.15;
+            
+            fundamental.connect(noteGain);
+            harmonic2.connect(harm2Gain);
+            harmonic3.connect(harm3Gain);
+            
+            noteGain.connect(gainNode);
+            harm2Gain.connect(gainNode);
+            harm3Gain.connect(gainNode);
+            
+            fundamental.start(startTime);
+            harmonic2.start(startTime);
+            harmonic3.start(startTime);
+            
+            fundamental.stop(startTime + duration);
+            harmonic2.stop(startTime + duration);
+            harmonic3.stop(startTime + duration);
+        }
+        
+        function playAveMaria() {
+            if (!audioContext || isMuted) return;
+            
+            const now = audioContext.currentTime;
+            const beat = 0.5; // Tempo
+            
+            // Ave Maria by Schubert - Opening melody (accurate notes)
+            const melody = [
+                // "A - ve Ma - ri - a"
+                { note: 'G4', duration: 1.5 },
+                { note: 'C5', duration: 0.5 },
+                { note: 'C5', duration: 1 },
+                { note: 'D5', duration: 0.5 },
+                { note: 'C5', duration: 0.5 },
+                { note: 'B4', duration: 1 },
+                { note: 'A4', duration: 1 },
+                { note: 'G4', duration: 2 },
+                
+                // Second phrase
+                { note: 'G4', duration: 1.5 },
+                { note: 'E5', duration: 0.5 },
+                { note: 'E5', duration: 1 },
+                { note: 'F5', duration: 0.5 },
+                { note: 'E5', duration: 0.5 },
+                { note: 'D5', duration: 1 },
+                { note: 'C5', duration: 1 },
+                { note: 'G4', duration: 2 },
+                
+                // Third phrase
+                { note: 'C5', duration: 1.5 },
+                { note: 'E5', duration: 0.5 },
+                { note: 'E5', duration: 1 },
+                { note: 'F5', duration: 0.5 },
+                { note: 'E5', duration: 0.5 },
+                { note: 'D5', duration: 1 },
+                { note: 'C5', duration: 1 },
+                { note: 'B4', duration: 2 },
+                
+                // Final phrase
+                { note: 'A4', duration: 1 },
+                { note: 'B4', duration: 0.5 },
+                { note: 'C5', duration: 0.5 },
+                { note: 'D5', duration: 1.5 },
+                { note: 'C5', duration: 0.5 },
+                { note: 'B4', duration: 1 },
+                { note: 'A4', duration: 1 },
+                { note: 'G4', duration: 3 }
+            ];
+            
+            const noteFrequencies = {
+                'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+                'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+                'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 
+                'G5': 783.99, 'A5': 880.00
+            };
+            
+            let time = now + 0.1;
+            melody.forEach(({ note, duration }) => {
+                playPianoNote(noteFrequencies[note], time, duration * beat, mainMelodyGain);
+                time += duration * beat;
+            });
+            
+            // Loop the melody
+            setTimeout(() => playAveMaria(), (time - now) * 1000 + 1000);
+        }
+        
+        function playChristBeOurLight() {
+            if (!audioContext || isMuted) return;
+            
+            const now = audioContext.currentTime;
+            const beat = 0.45;
+            
+            // "Christ Be Our Light" by Bernadette Farrell - Main melody (accurate)
+            const melody = [
+                // "Long-ness shad-ows for this world"
+                { note: 'G4', duration: 1 },
+                { note: 'G4', duration: 1 },
+                { note: 'A4', duration: 0.5 },
+                { note: 'B4', duration: 0.5 },
+                { note: 'C5', duration: 2 },
+                { note: 'B4', duration: 1 },
+                { note: 'A4', duration: 1 },
+                
+                // "Search-ing for truth"
+                { note: 'G4', duration: 1 },
+                { note: 'A4', duration: 1 },
+                { note: 'B4', duration: 1 },
+                { note: 'C5', duration: 2 },
+                { note: 'G4', duration: 2 },
+                
+                // "Man-y the hearts that yearn"
+                { note: 'D5', duration: 1 },
+                { note: 'D5', duration: 1 },
+                { note: 'E5', duration: 0.5 },
+                { note: 'D5', duration: 0.5 },
+                { note: 'C5', duration: 2 },
+                { note: 'B4', duration: 1 },
+                { note: 'A4', duration: 1 },
+                
+                // Chorus: "Christ be our light"
+                { note: 'G4', duration: 1.5 },
+                { note: 'A4', duration: 0.5 },
+                { note: 'B4', duration: 1 },
+                { note: 'C5', duration: 1 },
+                { note: 'D5', duration: 2 },
+                { note: 'C5', duration: 2 },
+                
+                // "Shine in our hearts"
+                { note: 'B4', duration: 1 },
+                { note: 'C5', duration: 1 },
+                { note: 'D5', duration: 1 },
+                { note: 'E5', duration: 1.5 },
+                { note: 'D5', duration: 0.5 },
+                { note: 'C5', duration: 3 }
+            ];
+            
+            const noteFrequencies = {
+                'C4': 261.63, 'D4': 293.66, 'E4': 329.63, 'F4': 349.23,
+                'G4': 392.00, 'A4': 440.00, 'B4': 493.88,
+                'C5': 523.25, 'D5': 587.33, 'E5': 659.25, 'F5': 698.46, 
+                'G5': 783.99, 'A5': 880.00
+            };
+            
+            let time = now + 0.1;
+            melody.forEach(({ note, duration }) => {
+                playPianoNote(noteFrequencies[note], time, duration * beat, victoryMelodyGain, 0.9);
+                time += duration * beat;
+            });
+            
+            // Loop the melody
+            setTimeout(() => playChristBeOurLight(), (time - now) * 1000 + 1500);
+        }
+        
+        function toggleMute() {
+            isMuted = !isMuted;
+            const btn = document.getElementById('muteBtn');
+            btn.textContent = isMuted ? '🔇' : '🔊';
+            
+            if (isMuted) {
+                mainMelodyGain.gain.value = 0;
+                victoryMelodyGain.gain.value = 0;
+            } else {
+                mainMelodyGain.gain.value = 0.12;
+                victoryMelodyGain.gain.value = 0.15;
+            }
+        }
+        
+        // Enhanced visual effects
+        function createDivineLight(targetElement) {
+            const light = document.createElement('div');
+            light.className = 'divine-light';
+            
+            const rect = targetElement.getBoundingClientRect();
+            light.style.left = (rect.left + rect.width / 2) + 'px';
+            
+            document.body.appendChild(light);
+            setTimeout(() => light.remove(), 2000);
+        }
+        
+        function createParticles(targetElement, count = 20) {
+            const rect = targetElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const angle = (Math.PI * 2 * i) / count;
+                const velocity = 2 + Math.random() * 2;
+                const tx = Math.cos(angle) * velocity * 50;
+                const ty = Math.sin(angle) * velocity * 50;
+                
+                particle.style.left = centerX + 'px';
+                particle.style.top = centerY + 'px';
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animationDelay = (i * 0.02) + 's';
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 3000);
+            }
+        }
+        
+        function createVictorySparkles(targetElement, count = 50) {
+            const rect = targetElement.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < count; i++) {
+                setTimeout(() => {
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'victory-sparkle';
+                    
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = Math.random() * 300;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    
+                    sparkle.style.left = centerX + 'px';
+                    sparkle.style.top = centerY + 'px';
+                    sparkle.style.setProperty('--tx', tx + 'px');
+                    sparkle.style.setProperty('--ty', ty + 'px');
+                    
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 1500);
+                }, i * 30);
+            }
+        }
+        
+        function createSlashEffect(targetElement) {
+            const rect = targetElement.getBoundingClientRect();
+            const slash = document.createElement('div');
+            slash.className = 'slash-effect';
+            slash.textContent = '⚔️';
+            slash.style.left = rect.left + 'px';
+            slash.style.top = (rect.top + rect.height / 2) + 'px';
+            
+            document.body.appendChild(slash);
+            setTimeout(() => slash.remove(), 600);
+        }
+        
         // Game state
         const game = {
             currentSinIndex: 0,
             currentTurn: 'player',
             heroes: [
                 {
-                    id: 'GUARDIAN ANGEL',
+                    id: 'hero',
                     name: 'GUARDIAN ANGEL',
                     hp: 777,
                     maxHP: 777,
                     attack: 25
                 },
                 {
-                    id: 'ST MICHAEL',
+                    id: 'companion',
                     name: 'ST MICHAEL',
                     hp: 900,
                     maxHP: 900,
@@ -811,6 +1343,11 @@
 
         function startGame() {
             document.getElementById('introScreen').classList.add('hidden');
+            
+            // Initialize and start audio
+            initAudio();
+            playAveMaria();
+            
             loadCurrentSin();
         }
 
@@ -854,6 +1391,11 @@
             setTimeout(() => {
                 heroEl.classList.remove('attacking');
                 
+                // Add slash effect
+                const enemyEl = document.getElementById('currentEnemy');
+                createSlashEffect(enemyEl);
+                createParticles(enemyEl, 15);
+                
                 applyDamageToEnemy(damage);
                 addBattleLog(`${hero.name} strikes ${sin.name} for ${damage} damage!`, 'log-damage');
                 
@@ -865,7 +1407,12 @@
             const sin = game.sins[game.currentSinIndex];
             
             const heroEl = document.getElementById(hero.id);
+            const enemyEl = document.getElementById('currentEnemy');
+            
             heroEl.classList.add('attacking');
+            
+            // Create divine light from heaven
+            createDivineLight(enemyEl);
             
             // Create prayer animation
             const rect = heroEl.getBoundingClientRect();
@@ -878,8 +1425,14 @@
             
             setTimeout(() => prayerAnim.remove(), 1500);
             
+            // Create particles around hero
+            createParticles(heroEl, 25);
+            
             setTimeout(() => {
                 heroEl.classList.remove('attacking');
+                
+                // More particles on enemy when hit by holy light
+                createParticles(enemyEl, 30);
                 
                 applyDamageToEnemy(prayer.damage);
                 addBattleLog(`${hero.name} prays ${prayer.name}! ${sin.name} takes ${prayer.damage} holy damage!`, 'log-prayer');
@@ -940,6 +1493,9 @@
             const sin = game.sins[game.currentSinIndex];
             
             if (sin.hp <= 0) {
+                const enemyEl = document.getElementById('currentEnemy');
+                createVictorySparkles(enemyEl, 60);
+                
                 addBattleLog(`${sin.name} has been vanquished!`, 'log-system');
                 showPassage(sin.passage);
                 return;
@@ -997,6 +1553,12 @@
         }
 
         function showCredits() {
+            // Stop main music and start victory music
+            mainMelodyGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 1);
+            setTimeout(() => {
+                playChristBeOurLight();
+            }, 1000);
+            
             document.getElementById('creditsScreen').classList.add('active');
         }
 
