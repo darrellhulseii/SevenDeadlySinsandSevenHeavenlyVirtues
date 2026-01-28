@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battle for Virtue</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Crimson+Text:wght@400;600;700&family=Cinzel:wght@600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Crimson Text', serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #2d1b4e 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+        
+        #introScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 40px;
+        }
+        
+        #introScreen.hidden {
+            display: none;
+        }
+        
+        .intro-content {
+            max-width: 800px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 50px;
+            border: 4px solid #FFD700;
+            border-radius: 20px;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
+        }
+        
+        .intro-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(28px, 5vw, 48px);
+            color: #FFD700;
+            margin-bottom: 30px;
+            text-shadow: 3px 3px 0 #000;
+        }
+        
+        .intro-text {
+            font-size: clamp(14px, 2.5vw, 20px);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            color: #f0f0f0;
+            text-align: justify;
+            font-style: italic;
+        }
+        
+        .intro-quote {
+            font-size: clamp(16px, 2.8vw, 22px);
+            color: #FFD700;
+            margin: 30px 0;
+            font-weight: 600;
+            text-shadow: 2px 2px 0 #000;
+        }
+        
+        .start-btn {
+            padding: 20px 50px;
+            background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+            border: 4px solid #fff;
+            color: #000;
+            font-family: 'Cinzel', serif;
+            font-size: clamp(16px, 3vw, 24px);
+            cursor: pointer;
+            font-weight: 700;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.5);
+            box-shadow: 0 6px 0 #8B6914;
+            border-radius: 10px;
+            transition: all 0.2s;
+            margin-top: 20px;
+        }
+        
+        .start-btn:hover {
+            background: linear-gradient(180deg, #FFEB3B 0%, #FFB300 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 9px 0 #8B6914;
+        }
+        
+        .start-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #8B6914;
+        }
+        
+        #gameContainer {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        #battleField {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 50px;
+            background: 
+                radial-gradient(ellipse at top, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, #1a0033 0%, #0f001a 100%);
+            overflow: hidden;
+        }
+        
+        .party-side {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            z-index: 10;
+        }
+        
+        .enemy-side {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        
+        .character {
+            position: relative;
+            text-align: center;
+        }
+        
+        .hero-sprite {
+            font-size: 80px;
+            animation: heroFloat 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+        }
+        
+        @keyframes heroFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .enemy-sprite {
+            font-size: 100px;
+            animation: enemyFloat 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.6));
+            margin-bottom: 20px;
+        }
+        
+        @keyframes enemyFloat {
+            0%, 100% { transform: translateY(0px) rotate(-5deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+        
+        .character-name {
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            margin-top: 15px;
+            text-shadow: 2px 2px 0 #000;
+            color: #FFD700;
+            font-weight: 700;
+        }
+        
+        .sin-name {
+            font-size: 24px;
+            color: #ff4444;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .hp-bar-container {
+            width: 150px;
+            height: 25px;
+            background: #000;
+            border: 3px solid #FFD700;
+            margin: 10px auto;
+            position: relative;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+            border-radius: 5px;
+        }
+        
+        .hp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff00 0%, #ffff00 50%, #ff0000 100%);
+            transition: width 0.5s ease;
+            box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .hp-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            color: #fff;
+            text-shadow: 1px 1px 0 #000;
+            font-weight: bold;
+            z-index: 1;
+            font-family: 'Crimson Text', serif;
+        }
+        
+        .damage-number {
+            position: absolute;
+            font-size: 32px;
+            color: #ff0000;
+            text-shadow: 3px 3px 0 #000, -1px -1px 0 #fff;
+            animation: damageFloat 1.2s ease-out forwards;
+            pointer-events: none;
+            font-weight: bold;
+            z-index: 100;
+            font-family: 'Cinzel', serif;
+        }
+        
+        @keyframes damageFloat {
+            0% { 
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-120px) scale(1.8);
+                opacity: 0;
+            }
+        }
+        
+        .heal-number {
+            color: #00ff00;
+        }
+        
+        #menuContainer {
+            height: 220px;
+            background: rgba(0, 0, 0, 0.95);
+            border-top: 4px solid #FFD700;
+            display: flex;
+            position: relative;
+            box-shadow: 0 -5px 30px rgba(255, 215, 0, 0.3);
+        }
+        
+        #battleLog {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 2;
+            border-right: 3px solid #FFD700;
+        }
+        
+        .log-entry {
+            margin: 8px 0;
+            color: #fff;
+            text-shadow: 1px 1px 0 #000;
+        }
+        
+        .log-damage {
+            color: #ff6b6b;
+            font-weight: 600;
+        }
+        
+        .log-prayer {
+            color: #51cf66;
+            font-style: italic;
+        }
+        
+        .log-system {
+            color: #ffd43b;
+            font-weight: 600;
+        }
+        
+        #actionMenu {
+            width: 450px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .menu-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .menu-title {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: #FFD700;
+            text-shadow: 2px 2px 0 #000;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .menu-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .menu-btn {
+            padding: 15px;
+            background: linear-gradient(180deg, #4a90e2 0%, #2e5c8a 100%);
+            border: 3px solid #FFD700;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            cursor: pointer;
+            text-shadow: 1px 1px 0 #000;
+            transition: all 0.15s;
+            box-shadow: 0 4px 0 #1a4d7a;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+        
+        .menu-btn:hover {
+            background: linear-gradient(180deg, #5aa3ff 0%, #3d6fa3 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 0 #1a4d7a;
+        }
+        
+        .menu-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 0 #1a4d7a;
+        }
+        
+        .menu-btn.prayer {
+            background: linear-gradient(180deg, #9b59b6 0%, #6c3483 100%);
+            box-shadow: 0 4px 0 #4a235a;
+        }
+        
+        .menu-btn.prayer:hover {
+            background: linear-gradient(180deg, #ae6bc7 0%, #7d3c98 100%);
+        }
+        
+        #passageOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1500;
+            padding: 40px;
+        }
+        
+        #passageOverlay.active {
+            display: flex;
+        }
+        
+        .passage-content {
+            max-width: 700px;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 50px;
+            border: 5px solid #FFD700;
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+            text-align: center;
+        }
+        
+        .passage-title {
+            font-family: 'Cinzel', serif;
+            font-size: 28px;
+            color: #FFD700;
+            margin-bottom: 25px;
+            text-shadow: 3px 3px 0 #000;
+        }
+        
+        .passage-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #f0f0f0;
+            margin-bottom: 30px;
+            text-align: justify;
+            font-style: italic;
+        }
+        
+        .passage-reference {
+            font-size: 14px;
+            color: #FFD700;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+        
+        .continue-btn {
+            padding: 18px 45px;
+            background: linear-gradient(180deg, #27ae60 0%, #1e8449 100%);
+            border: 4px solid #FFD700;
+            color: #fff;
+            font-family: 'Cinzel', serif;
+            font-size: 16px;
+            cursor: pointer;
+            text-shadow: 2px 2px 0 #000;
+            box-shadow: 0 6px 0 #145a32;
+            border-radius: 10px;
+            font-weight: 700;
+            transition: all 0.2s;
+        }
+        
+        .continue-btn:hover {
+            background: linear-gradient(180deg, #2ecc71 0%, #229954 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #145a32;
+        }
+        
+        .continue-btn:active {
+            transform: translateY(2px);
+            box-shadow: 0 3px 0 #145a32;
+        }
+        
+        #creditsScreen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 40px;
+            overflow-y: auto;
+        }
+        
+        #creditsScreen.active {
+            display: flex;
+        }
+        
+        .credits-content {
+            max-width: 900px;
+            text-align: center;
+            padding: 50px;
+        }
+        
+        .credits-title {
+            font-family: 'Cinzel', serif;
+            font-size: 48px;
+            color: #FFD700;
+            margin-bottom: 50px;
+            text-shadow: 4px 4px 0 #000;
+            animation: titleGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes titleGlow {
+            0%, 100% { text-shadow: 4px 4px 0 #000, 0 0 20px #FFD700; }
+            50% { text-shadow: 4px 4px 0 #000, 0 0 40px #FFD700; }
+        }
+        
+        .credits-section {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 30px;
+            border: 3px solid #FFD700;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.4);
+        }
+        
+        .credits-subtitle {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            color: #FFD700;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .credits-text {
+            font-size: 18px;
+            line-height: 1.9;
+            color: #f0f0f0;
+            text-align: justify;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+        
+        .character.attacking {
+            animation: attackMove 0.6s ease-in-out;
+        }
+        
+        @keyframes attackMove {
+            0%, 100% { transform: translateX(0) scale(1); }
+            50% { transform: translateX(50px) scale(1.2); }
+        }
+        
+        .character.damaged {
+            animation: damageShake 0.5s ease-in-out;
+        }
+        
+        @keyframes damageShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-15px); }
+            75% { transform: translateX(15px); }
+        }
+        
+        .prayer-animation {
+            position: absolute;
+            font-size: 50px;
+            animation: prayerRise 1.5s ease-out forwards;
+            z-index: 50;
+            pointer-events: none;
+        }
+        
+        @keyframes prayerRise {
+            0% { 
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            30% {
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-150px) scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            #battleField {
+                padding: 20px;
+            }
+            
+            .hero-sprite {
+                font-size: 60px;
+            }
+            
+            .enemy-sprite {
+                font-size: 70px;
+            }
+            
+            #actionMenu {
+                width: 100%;
+            }
+            
+            .menu-btn {
+                font-size: 10px;
+                padding: 12px;
+            }
+            
+            .intro-content,
+            .passage-content {
+                padding: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Intro Screen -->
+    <div id="introScreen">
+        <div class="intro-content">
+            <div class="intro-title">⛪ BATTLE FOR VIRTUE ⛪</div>
+            
+            <div class="intro-text">
+                "Man is divided in himself. As a result, the whole life of men, both individual and social, shows itself to be a struggle, and a dramatic one, between good and evil, between light and darkness."
+            </div>
+            
+            <div class="intro-reference" style="font-size: 14px; color: #FFD700; margin-bottom: 25px;">
+                — Catechism of the Catholic Church, 409
+            </div>
+            
+            <div class="intro-text">
+                "The struggle against our inclinations toward evil is not easy; every man experiences it within himself. As a result, the entire life of man is a combat against the powers of darkness."
+            </div>
+            
+            <div class="intro-quote">
+                ✝ IT'S UP TO YOU TO FIGHT FOR WHAT'S GOOD IN THE WORLD ✝
+            </div>
+            
+            <button class="start-btn" onclick="startGame()">BEGIN YOUR JOURNEY</button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="gameContainer">
+        <div id="battleField">
+            <div class="party-side">
+                <div class="character" id="hero">
+                    <div class="hero-sprite">☃️</div>
+                    <div class="character-name">GUARDIAN</div>
+                    <div class="hp-bar-container">
+                        <div class="hp-bar" style="width: 100%"></div>
+                        <div class="hp-text">150/150</div>
+                    </div>
+                </div>
+                
+                <div class="character" id="companion">
+                    <div class="hero-sprite">🦧</div>
+                    <div class="character-name">COMPANION</div>
+                    <div class="hp-bar-container">
+                        <div class="hp-bar" style="width: 100%"></div>
+                        <div class="hp-text">120/120</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="enemy-side" id="enemyContainer">
+                <div class="sin-name" id="sinName">PRIDE</div>
+                <div class="character enemy" id="currentEnemy">
+                    <div class="enemy-sprite" id="enemySprite">😈</div>
+                    <div class="hp-bar-container">
+                        <div class="hp-bar" style="width: 100%"></div>
+                        <div class="hp-text">100/100</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="menuContainer">
+            <div id="battleLog">
+                <div class="log-entry log-system">⚔️ The battle against sin begins! ⚔️</div>
+            </div>
+            
+            <div id="actionMenu">
+                <div class="menu-section">
+                    <div class="menu-title">▶ ACTIONS</div>
+                    <div class="menu-buttons">
+                        <button class="menu-btn" onclick="selectAction('attack')">⚔️ STRIKE</button>
+                        <button class="menu-btn prayer" onclick="selectAction('prayer')">🙏 PRAYER</button>
+                    </div>
+                </div>
+                
+                <div class="menu-section">
+                    <div class="menu-title">CURRENT SIN: <span id="currentSinDisplay">PRIDE</span></div>
+                    <div style="font-size: 12px; color: #ccc;">Defeat all Seven Deadly Sins</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Passage Overlay -->
+    <div id="passageOverlay">
+        <div class="passage-content">
+            <div class="passage-title" id="passageTitle">Victory!</div>
+            <div class="passage-text" id="passageText"></div>
+            <div class="passage-reference" id="passageReference"></div>
+            <button class="continue-btn" onclick="closePassage()">CONTINUE</button>
+        </div>
+    </div>
+
+    <!-- Credits Screen -->
+    <div id="creditsScreen">
+        <div class="credits-content">
+            <div class="credits-title">✝ VICTORY OVER SIN ✝</div>
+            
+            <div class="credits-section">
+                <div class="credits-subtitle">THE VIRTUES</div>
+                <div class="credits-text">
+                    "Human virtues are firm attitudes, stable dispositions, habitual perfections of intellect and will that govern our actions, order our passions, and guide our conduct according to reason and faith. They make possible ease, self-mastery, and joy in leading a morally good life."
+                </div>
+                <div class="passage-reference">— CCC 1804</div>
+            </div>
+            
+            <div class="credits-section">
+                <div class="credits-subtitle">CONSEQUENCES OF SIN</div>
+                <div class="credits-text">
+                    "Sin creates a proclivity to sin; it engenders vice by repetition of the same acts. This results in perverse inclinations which cloud conscience and corrupt the concrete judgment of good and evil. Thus sin tends to reproduce itself and reinforce itself, but it cannot destroy the moral sense at its root."
+                </div>
+                <div class="passage-reference">— CCC 1865</div>
+            </div>
+            
+            <div class="credits-section">
+                <div class="credits-subtitle">THE CALL TO HOLINESS</div>
+                <div class="credits-text">
+                    "All Christians in any state or walk of life are called to the fullness of Christian life and to the perfection of charity. All are called to holiness: 'Be perfect, as your heavenly Father is perfect.'"
+                </div>
+                <div class="passage-reference">— CCC 2013</div>
+            </div>
+            
+            <div class="credits-section">
+                <div class="credits-subtitle">GRACE AND JUSTIFICATION</div>
+                <div class="credits-text">
+                    "Grace is favor, the free and undeserved help that God gives us to respond to his call to become children of God, adoptive sons, partakers of the divine nature and of eternal life."
+                </div>
+                <div class="passage-reference">— CCC 1996</div>
+            </div>
+            
+            <div style="margin-top: 50px;">
+                <button class="continue-btn" onclick="location.reload()">PLAY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game state
+        const game = {
+            currentSinIndex: 0,
+            currentTurn: 'player',
+            heroes: [
+                {
+                    id: 'GUARDIAN ANGEL',
+                    name: 'GUARDIAN ANGEL',
+                    hp: 777,
+                    maxHP: 777,
+                    attack: 25
+                },
+                {
+                    id: 'ST MICHAEL',
+                    name: 'ST MICHAEL',
+                    hp: 900,
+                    maxHP: 900,
+                    attack: 20
+                }
+            ],
+            currentHeroIndex: 0,
+            sins: [
+                {
+                    name: 'PRIDE',
+                    emoji: '😈',
+                    hp: 100,
+                    maxHP: 100,
+                    attack: 20,
+                    passage: {
+                        title: 'On Pride',
+                        text: 'Pride is inordinate self-love which causes one to consider oneself superior to others and to hold others in contempt. It makes one refuse submission to God and even results in a person considering himself a god. Pride was the sin of Satan and our first parents. It is the beginning of every sin and the queen of vices.',
+                        reference: 'CCC 1866, 2094'
+                    }
+                },
+                {
+                    name: 'ENVY',
+                    emoji: '👿',
+                    hp: 100,
+                    maxHP: 100,
+                    attack: 18,
+                    passage: {
+                        title: 'On Envy',
+                        text: 'Envy is sadness at the sight of another\'s goods and the immoderate desire to acquire them for oneself, even unjustly. When it wishes grave harm to a neighbor it is a mortal sin. Envy represents a form of sadness and therefore a refusal of charity; the baptized person should struggle against it by exercising good will.',
+                        reference: 'CCC 2539, 2540'
+                    }
+                },
+                {
+                    name: 'WRATH',
+                    emoji: '😡',
+                    hp: 110,
+                    maxHP: 110,
+                    attack: 25,
+                    passage: {
+                        title: 'On Wrath',
+                        text: 'Anger is a desire for revenge. To desire vengeance in order to do evil to someone who should be punished is illicit, but it is praiseworthy to impose restitution to correct vices and maintain justice. If anger reaches the point of a deliberate desire to kill or seriously wound a neighbor, it is gravely against charity; it is a mortal sin.',
+                        reference: 'CCC 2302'
+                    }
+                },
+                {
+                    name: 'SLOTH',
+                    emoji: '😴',
+                    hp: 90,
+                    maxHP: 90,
+                    attack: 15,
+                    passage: {
+                        title: 'On Sloth',
+                        text: 'Acedia or spiritual sloth goes so far as to refuse the joy that comes from God and to be repelled by divine goodness. Sloth is a culpable lack of physical or spiritual effort. It refuses to consent to the obligation of participation in the love of God and neighbor.',
+                        reference: 'CCC 2094, 2733'
+                    }
+                },
+                {
+                    name: 'GREED',
+                    emoji: '💰',
+                    hp: 100,
+                    maxHP: 100,
+                    attack: 22,
+                    passage: {
+                        title: 'On Greed',
+                        text: 'Greed is a disordered desire for or inordinate attachment to material possessions and money. It is forbidden by the tenth commandment. The desire for the goods of another is immense, limitless, never satisfied. Greed is idolatry in that it makes money and possessions an ultimate end.',
+                        reference: 'CCC 2536, 2551'
+                    }
+                },
+                {
+                    name: 'GLUTTONY',
+                    emoji: '🍔',
+                    hp: 95,
+                    maxHP: 95,
+                    attack: 18,
+                    passage: {
+                        title: 'On Gluttony',
+                        text: 'The virtue of temperance disposes us to avoid every kind of excess: the abuse of food, alcohol, tobacco, or medicine. Gluttony represents an inordinate desire to consume more than that which one requires. It is a sin against temperance and fails to respect the proper care of the body.',
+                        reference: 'CCC 2290, 1809'
+                    }
+                },
+                {
+                    name: 'LUST',
+                    emoji: '💋',
+                    hp: 100,
+                    maxHP: 100,
+                    attack: 20,
+                    passage: {
+                        title: 'On Lust',
+                        text: 'Lust is disordered desire for or inordinate enjoyment of sexual pleasure. Sexual pleasure is morally disordered when sought for itself, isolated from its procreative and unitive purposes. The virtue of chastity comes under the cardinal virtue of temperance, which seeks to permeate the passions and appetites of the senses with reason.',
+                        reference: 'CCC 2351, 1809'
+                    }
+                }
+            ],
+            prayers: [
+                { name: 'OUR FATHER', icon: '✝️', damage: 40 },
+                { name: 'HAIL MARY', icon: '🌹', damage: 35 },
+                { name: 'GLORY BE', icon: '✨', damage: 30 },
+                { name: 'JESUS PRAYER', icon: '🙏', damage: 45 }
+            ],
+            waitingForAction: true
+        };
+
+        function startGame() {
+            document.getElementById('introScreen').classList.add('hidden');
+            loadCurrentSin();
+        }
+
+        function loadCurrentSin() {
+            const sin = game.sins[game.currentSinIndex];
+            document.getElementById('sinName').textContent = sin.name;
+            document.getElementById('currentSinDisplay').textContent = sin.name;
+            document.getElementById('enemySprite').textContent = sin.emoji;
+            
+            updateEnemyHealthBar();
+            addBattleLog(`You face ${sin.name}! May God grant you strength!`, 'log-system');
+        }
+
+        function selectAction(action) {
+            if (!game.waitingForAction) return;
+            
+            game.waitingForAction = false;
+            const currentHero = game.heroes[game.currentHeroIndex];
+            
+            if (action === 'attack') {
+                executeAttack(currentHero);
+            } else if (action === 'prayer') {
+                showPrayerMenu();
+            }
+        }
+
+        function showPrayerMenu() {
+            const prayers = game.prayers;
+            const randomPrayer = prayers[Math.floor(Math.random() * prayers.length)];
+            
+            executePrayer(game.heroes[game.currentHeroIndex], randomPrayer);
+        }
+
+        function executeAttack(hero) {
+            const sin = game.sins[game.currentSinIndex];
+            const damage = Math.floor(hero.attack + Math.random() * 10);
+            
+            const heroEl = document.getElementById(hero.id);
+            heroEl.classList.add('attacking');
+            
+            setTimeout(() => {
+                heroEl.classList.remove('attacking');
+                
+                applyDamageToEnemy(damage);
+                addBattleLog(`${hero.name} strikes ${sin.name} for ${damage} damage!`, 'log-damage');
+                
+                checkBattleEnd();
+            }, 300);
+        }
+
+        function executePrayer(hero, prayer) {
+            const sin = game.sins[game.currentSinIndex];
+            
+            const heroEl = document.getElementById(hero.id);
+            heroEl.classList.add('attacking');
+            
+            // Create prayer animation
+            const rect = heroEl.getBoundingClientRect();
+            const prayerAnim = document.createElement('div');
+            prayerAnim.className = 'prayer-animation';
+            prayerAnim.textContent = prayer.icon;
+            prayerAnim.style.left = rect.left + rect.width / 2 + 'px';
+            prayerAnim.style.top = rect.top + 'px';
+            document.body.appendChild(prayerAnim);
+            
+            setTimeout(() => prayerAnim.remove(), 1500);
+            
+            setTimeout(() => {
+                heroEl.classList.remove('attacking');
+                
+                applyDamageToEnemy(prayer.damage);
+                addBattleLog(`${hero.name} prays ${prayer.name}! ${sin.name} takes ${prayer.damage} holy damage!`, 'log-prayer');
+                
+                checkBattleEnd();
+            }, 800);
+        }
+
+        function applyDamageToEnemy(damage) {
+            const sin = game.sins[game.currentSinIndex];
+            sin.hp = Math.max(0, sin.hp - damage);
+            
+            const enemyEl = document.getElementById('currentEnemy');
+            enemyEl.classList.add('damaged');
+            setTimeout(() => enemyEl.classList.remove('damaged'), 500);
+            
+            updateEnemyHealthBar();
+            showDamageNumber('currentEnemy', damage, false);
+        }
+
+        function updateEnemyHealthBar() {
+            const sin = game.sins[game.currentSinIndex];
+            const enemyEl = document.getElementById('currentEnemy');
+            const hpBar = enemyEl.querySelector('.hp-bar');
+            const hpText = enemyEl.querySelector('.hp-text');
+            
+            const percent = (sin.hp / sin.maxHP) * 100;
+            hpBar.style.width = percent + '%';
+            hpText.textContent = `${Math.floor(sin.hp)}/${sin.maxHP}`;
+        }
+
+        function updateHeroHealthBar(heroId) {
+            const hero = game.heroes.find(h => h.id === heroId);
+            const heroEl = document.getElementById(heroId);
+            const hpBar = heroEl.querySelector('.hp-bar');
+            const hpText = heroEl.querySelector('.hp-text');
+            
+            const percent = (hero.hp / hero.maxHP) * 100;
+            hpBar.style.width = percent + '%';
+            hpText.textContent = `${Math.floor(hero.hp)}/${hero.maxHP}`;
+        }
+
+        function showDamageNumber(targetId, amount, isHeal) {
+            const targetEl = document.getElementById(targetId);
+            const rect = targetEl.getBoundingClientRect();
+            
+            const damageNum = document.createElement('div');
+            damageNum.className = 'damage-number' + (isHeal ? ' heal-number' : '');
+            damageNum.textContent = (isHeal ? '+' : '-') + amount;
+            damageNum.style.left = rect.left + rect.width / 2 + 'px';
+            damageNum.style.top = rect.top + 'px';
+            
+            document.body.appendChild(damageNum);
+            setTimeout(() => damageNum.remove(), 1200);
+        }
+
+        function checkBattleEnd() {
+            const sin = game.sins[game.currentSinIndex];
+            
+            if (sin.hp <= 0) {
+                addBattleLog(`${sin.name} has been vanquished!`, 'log-system');
+                showPassage(sin.passage);
+                return;
+            }
+            
+            setTimeout(() => enemyTurn(), 1000);
+        }
+
+        function enemyTurn() {
+            const sin = game.sins[game.currentSinIndex];
+            const target = game.heroes[Math.floor(Math.random() * game.heroes.length)];
+            
+            const damage = Math.floor(sin.attack + Math.random() * 8);
+            
+            target.hp = Math.max(0, target.hp - damage);
+            
+            const targetEl = document.getElementById(target.id);
+            targetEl.classList.add('damaged');
+            setTimeout(() => targetEl.classList.remove('damaged'), 500);
+            
+            updateHeroHealthBar(target.id);
+            showDamageNumber(target.id, damage, false);
+            addBattleLog(`${sin.name} attacks ${target.name} for ${damage} damage!`, 'log-damage');
+            
+            if (game.heroes.every(h => h.hp <= 0)) {
+                setTimeout(() => {
+                    alert('You have been defeated. But do not lose hope - try again!');
+                    location.reload();
+                }, 1000);
+                return;
+            }
+            
+            game.currentHeroIndex = (game.currentHeroIndex + 1) % game.heroes.length;
+            game.waitingForAction = true;
+        }
+
+        function showPassage(passage) {
+            document.getElementById('passageTitle').textContent = passage.title;
+            document.getElementById('passageText').textContent = passage.text;
+            document.getElementById('passageReference').textContent = passage.reference;
+            document.getElementById('passageOverlay').classList.add('active');
+        }
+
+        function closePassage() {
+            document.getElementById('passageOverlay').classList.remove('active');
+            
+            game.currentSinIndex++;
+            
+            if (game.currentSinIndex >= game.sins.length) {
+                showCredits();
+            } else {
+                loadCurrentSin();
+                game.waitingForAction = true;
+            }
+        }
+
+        function showCredits() {
+            document.getElementById('creditsScreen').classList.add('active');
+        }
+
+        function addBattleLog(message, className = '') {
+            const log = document.getElementById('battleLog');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry ' + className;
+            entry.textContent = message;
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+        }
+    </script>
+</body>
+</html>
